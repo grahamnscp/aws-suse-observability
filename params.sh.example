@@ -1,0 +1,28 @@
+# Params.sh
+
+# params used in deployment scripts
+
+# aws access
+SSH_USERNAME=ec2-user
+SSH_KEY=/Users/myuser/.ssh/awsmyuser
+SSH_OPTS="-o StrictHostKeyChecking=no -i $SSH_KEY"
+
+# rke2
+# https://github.com/rancher/rke2/releases
+RKE2_TOKEN="myjointoken"
+RKE2_VERSION="v1.31.8+rke2r1"
+
+# Instance attached storage device name
+#STORAGE_DEV1="nvme0n1"
+STORAGE_DEV1="nvme1n1"
+
+# SUSE Observability
+OBS_LICENSE="MY-SUSE-OBS-LICENCE-KEY-HERE"
+OBS_HOSTNAME=obs.domainname
+OBS_ADMIN_PWD=mysuseobsadminpwd
+OBS_SERVICE_TOKEN=mytokenvalue
+
+# SUSE Application Collection
+APPCOL_USER="my@emaildomain.com"
+APPCOL_TOKEN="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX=="
+

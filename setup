@@ -1,0 +1,41 @@
+#!/bin/bash
+
+source ./utils/utils.sh
+
+LogStarted "=====================================> Provisioning infra via terraform.."
+
+cd tf
+terraform apply -auto-approve
+cd ..
+
+Log "sleeping to wait for instances to initialise.."
+sleep 10
+LogElapsedDuration
+
+LogStarted "=====================================> Calling install subscripts.."
+
+Log "===========================> Cleaning up from previous run.."
+bash 00-clean
+
+Log "===========================> Installing RKE2 cluster.."
+bash 01-install-rke2.sh
+LogElapsedDuration
+
+Log "===========================> Installing Longhorn storage.."
+bash 02-install-longhorn.sh
+LogElapsedDuration
+
+Log "===========================> Installing SUSE Observability.."
+bash 03-install-obs.sh
+LogElapsedDuration
+
+Log "===========================> Installing configuring SUSE Observability.."
+bash 04-obs-config.sh
+LogElapsedDuration
+
+# --------------------------------------
+LogElapsedDuration
+LogCompleted "Done."
+
+# tidy up
+exit 0
