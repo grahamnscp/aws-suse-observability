@@ -33,6 +33,10 @@ Log "===========================> Installing configuring SUSE Observability.."
 bash 04-obs-config.sh
 LogElapsedDuration
 
+Log "===========================> Setting up simulated remote cluster otlp exporter.."
+bash 05-otlp-client.sh
+LogElapsedDuration
+
 # --------------------------------------
 LogElapsedDuration
 LogCompleted "Done."

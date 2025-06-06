@@ -143,7 +143,7 @@ config:
 
   exporters:
     nop: {}
-    otlpgrpc/suse-observability:
+    otlp/suse-observability:
       auth:
         authenticator: bearertokenauth
       endpoint: https://otlp-grpc-${OBS_HOSTNAME}:443
@@ -266,6 +266,7 @@ helm upgrade --kubeconfig=./local/admin.conf --install opentelemetry-collector \
 
 # ----------------------
 # create a dummy gpu-operator namespace and resources
+Log "\_Creating gpu-operator namespace for testing.."
 kubectl --kubeconfig=./local/admin.conf create namespace gpu-operator
 cat << APPEOF >./local/sample-app-wordpress.yaml
 wordpress:
@@ -290,6 +291,7 @@ wordpress:
 APPEOF
 helm repo add rodeo https://rancher.github.io/rodeo
 helm repo update
+Log "\__Installing sample app into gpu-operator namespace.."
 helm --kubeconfig=./local/admin.conf upgrade --install wordpress rodeo/wordpress \
   --namespace gpu-operator \
   --set wordpress.ingress.hostname=wordpress-$OBS_HOSTNAME \
