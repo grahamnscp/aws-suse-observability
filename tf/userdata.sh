@@ -15,7 +15,7 @@ echo "syntax on"            >> /root/.vimrc
 systemctl enable iscsid --now
 
 # Tuning
-# Environment: promtail 2.9.8 on amd64 EC2
+# Environment: promtail on amd64 EC2
 echo "fs.inotify.max_user_instances = 1024" | tee -a /etc/sysctl.conf
 sysctl -p
 sysctl fs.inotify
