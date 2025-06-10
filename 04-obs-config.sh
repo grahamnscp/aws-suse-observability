@@ -98,11 +98,11 @@ INGEOF
 kubectl --kubeconfig=./local/admin.conf apply -f ./local/otlp-ingress.yaml
 
 echo 
-echo "${BWhi}**************************************"
+echo "${BWhi}*********************************************"
 echo "SUSE Observability OTLP Listening at:"
-echo "  https://otlp-grpc-$OBS_HOSTNAME"
-echo "  http://otlp-http-$OBS_HOSTNAME"
-echo "**************************************${RCol}"
+echo "  https://otlp-grpc-${OBS_HOSTNAME}:443"
+echo "  http://otlp-http-${OBS_HOSTNAME}:80"
+echo "*********************************************${RCol}"
 echo 
 
 # ----------------------------------------
