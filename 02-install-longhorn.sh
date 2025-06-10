@@ -111,8 +111,16 @@ function helminstalllonghorn
   Log " \_Creating longhorn helm chart values.."
   cat << LEOF >./local/longhorn-values.yaml
 persistence:
+  defaultClassReplicaCount: 1
   defaultClass: true
   defaultFsType: xfs
+csi:
+  attacherReplicaCount: 1
+  provisionerReplicaCount: 1
+  resizerReplicaCount: 1
+  snapshotterReplicaCount: 1
+defaultSettings:
+  defaultReplicaCount: 1
 LEOF
 
   Log " \_Installing longhorn helm chart.."
