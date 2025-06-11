@@ -209,8 +209,8 @@ Log "\_waiting for suse-observability to be Ready.."
 kubectl --kubeconfig=./local/admin.conf wait pods -n suse-observability -l app.kubernetes.io/instance=obs --for condition=Ready --timeout=900s
 
 # sometimes drops through above and needs a little bit more time
-Log "\_sleeping for 1 minute.."
-sleep 60
+Log "\_sleeping for 2 minutes.."
+sleep 120
 
 # -------------------------------------------------------------------------------------
 LogElapsedDuration
