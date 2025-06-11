@@ -105,10 +105,11 @@ function helminstalllonghorn
   kubectl --kubeconfig=./local/admin.conf create namespace longhorn-system
 
   # helm install longhorn
+  Log " \__Addinh longhorn helm repo.."
   helm repo add longhorn https://charts.longhorn.io
   helm repo update
 
-  Log " \_Creating longhorn helm chart values.."
+  Log " \__Creating longhorn helm chart values.."
   cat << LEOF >./local/longhorn-values.yaml
 persistence:
   defaultClassReplicaCount: 1
@@ -123,7 +124,7 @@ defaultSettings:
   defaultReplicaCount: 1
 LEOF
 
-  Log " \_Installing longhorn helm chart.."
+  Log " \__Installing longhorn helm chart.."
   helm upgrade --kubeconfig=./local/admin.conf \
   --install longhorn longhorn/longhorn \
   --namespace longhorn-system \
@@ -136,11 +137,11 @@ LEOF
 # Main
 LogStarted "Installing Longhorn.."
 
-Log "\__Generating longhorn storage script.."
+Log "\_Generating longhorn storage script.."
 # generate partitioning script
 longhornstoragescript $node
 
-Log "\__Mounting longhorn volume on cluster nodes.."
+Log "\_Mounting longhorn volume on cluster nodes.."
 # mounts longhorn storage on each master node
 for ((node=1; node<=$NUM_NODES; node++))
 do
@@ -148,7 +149,7 @@ do
   LogElapsedDuration
 done
 
-Log "\__Mounting longhorn volume on agent nodes.."
+Log "\_Mounting longhorn volume on agent nodes.."
 # mounts longhorn storage on each agent node
 for ((node=1; node<=$NUM_AGENTS; node++))
 do
@@ -156,7 +157,7 @@ do
   LogElapsedDuration
 done
 
-Log "\__Installing longhorn on via helm.."
+Log "\_Installing longhorn on via helm.."
 helminstalllonghorn
 
 
