@@ -289,13 +289,48 @@ wordpress:
       persistence:
         enabled: false
 APPEOF
-helm repo add rodeo https://rancher.github.io/rodeo
+#helm repo add rodeo https://rancher.github.io/rodeo
+helm repo add ghcharts https://github.com/grahamnscp/app-helm-charts/raw/main/
+helm repo update
+helm search repo ghcharts --versions
+
 helm repo update
 Log "\__Installing sample app into gpu-operator namespace.."
 helm --kubeconfig=./local/admin.conf upgrade --install wordpress rodeo/wordpress \
   --namespace gpu-operator \
   --set wordpress.ingress.hostname=wordpress-$OBS_HOSTNAME \
   -f ./local/sample-app-wordpress.yaml
+
+# wordpress ingress
+cat << INGEOF >./local/wordpress-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wordpress-ingress
+  namespace: gpu-operator
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: selfsigned-issuer
+spec:
+  rules:
+  - host: wordpress-$OBS_HOSTNAME
+    http:
+      paths:
+      - backend:
+          service:
+            name: wordpress
+            port:
+              number: 433
+        path: /
+        pathType: Prefix
+  tls:
+    - hosts:
+      - wordpress-$OBS_HOSTNAME
+      secretName: wordpress-tls-secret
+INGEOF
+
+kubectl --kubeconfig=./local/admin.conf apply -f ./local/wordpress-ingress.yaml
 
 # -------------------------------------------------------------------------------------
 LogElapsedDuration
