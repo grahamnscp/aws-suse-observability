@@ -1,0 +1,39 @@
+#!/bin/bash
+
+source ./utils/utils.sh
+
+LogStarted "=====================> Deploying suse instances.."
+
+Log "===========> Provisioning infra via terraform.."
+cd tf
+terraform apply -auto-approve
+cd ..
+Log ">> sleep 60"
+sleep 60
+LogElapsedDuration
+
+
+LogStarted "===========> Installing RKE2.."
+bash scripts/01-install-rke2.sh
+LogElapsedDuration
+
+LogStarted "===========> Installing longhorn.."
+bash scripts/02-install-longhorn.sh
+LogElapsedDuration
+
+LogStarted "===========> Installing SUSE Observability.."
+bash scripts/03-install-obs.sh
+LogElapsedDuration
+
+LogStarted "===========> Performing post install SUSE Observability config.."
+bash scripts/04-obs-config.sh
+LogElapsedDuration
+
+LogStarted "===========> Installing OTLP Client.."
+bash scripts/05-otlp-client.sh
+LogElapsedDuration
+
+
+LogCompleted "=====================> Done."
+echo "Done."
+

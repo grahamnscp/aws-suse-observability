@@ -296,7 +296,7 @@ helm search repo ghcharts --versions
 
 helm repo update
 Log "\__Installing sample app into gpu-operator namespace.."
-helm --kubeconfig=./local/admin.conf upgrade --install wordpress rodeo/wordpress \
+helm --kubeconfig=./local/admin.conf upgrade --install wordpress ghcharts/wordpress \
   --namespace gpu-operator \
   --set wordpress.ingress.hostname=wordpress-$OBS_HOSTNAME \
   -f ./local/sample-app-wordpress.yaml

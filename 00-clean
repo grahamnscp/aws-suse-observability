@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# clean local directory
-rm -rf ./local/*
-echo 1 > ./local/.keep
-
