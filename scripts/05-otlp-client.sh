@@ -143,7 +143,7 @@ config:
 
   exporters:
     nop: {}
-    otlp/suse-observability:
+    otlp_grpc/suse-observability:
       auth:
         authenticator: bearertokenauth
       endpoint: https://otlp-grpc-${OBS_HOSTNAME}:443
@@ -151,7 +151,7 @@ config:
       tls:
         insecure_skip_verify: true
         #insecure: true
-    otlphttp/suse-observability:
+    otlp_http/suse-observability:
       auth:
         authenticator: bearertokenauth
       endpoint: http://otlp-http-${OBS_HOSTNAME}:80
@@ -225,9 +225,9 @@ config:
     extensions: [ health_check,  bearertokenauth ]
     pipelines:
       traces:
-        receivers: [otlp, jaeger]
+        receivers: [otlp_grpc, jaeger]
         processors: [filter/dropMissingK8sAttributes, memory_limiter, resource]
-        exporters: [debug, spanmetrics, routing/traces, otlphttp/suse-observability]
+        exporters: [debug, spanmetrics, routing/traces, otlp_http/suse-observability]
       traces/spanmetrics:
         receivers: [routing/traces]
         processors: []
@@ -235,13 +235,13 @@ config:
       traces/sampling:
         receivers: [routing/traces]
         processors: [tail_sampling, batch]
-        exporters: [debug, otlphttp/suse-observability]
+        exporters: [debug, otlp_http/suse-observability]
       metrics:
-        receivers: [otlp, spanmetrics, prometheus]
+        receivers: [otlp_grpc, spanmetrics, prometheus]
         processors: [memory_limiter, resource, batch]
-        exporters: [debug, otlphttp/suse-observability]
+        exporters: [debug, otlp_http/suse-observability]
       logs:
-        receivers: [otlp]
+        receivers: [otlp_grpc]
         processors: []
         exporters: [nop]
 
@@ -251,12 +251,10 @@ serviceAccount:
 OTELVEOF
 
 
-Log "\__Authenticating local helm cli to SUSE Application Collection registry.."
-helm registry login dp.apps.rancher.io/charts -u $APPCOL_USER -p $APPCOL_TOKEN
-
 Log "\__Creating docker-registry application-collection secret.."
-kubectl --kubeconfig=./local/admin.conf create secret docker-registry application-collection --docker-server=dp.apps.rancher.io --docker-username=$APPCOL_USER --docker-password=$APPCOL_TOKEN -n observability
-
+kubectl --kubeconfig=./local/admin.conf create secret docker-registry application-collection \
+   --docker-server=dp.apps.rancher.io --docker-username=$APPCOL_USER --docker-password=$APPCOL_TOKEN \
+   -n observability
 
 Log "\__Installing opentelemetry-collector helm chart on SUSE AI (remote cluster).."
 helm upgrade --kubeconfig=./local/admin.conf --install opentelemetry-collector \

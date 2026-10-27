@@ -201,7 +201,9 @@ global:
 serverUrl: $SUSE_OBSERVABILITY_API_URL
 apiKey: $SUSE_OBSERVABILITY_API_KEY
 apiToken: $SUSE_OBSERVABILITY_API_CLI_TOKEN
-clusterName: $OBSERVED_SERVER_NAME
+tokenType: service
+kubernetesClusters: 
+  - $OBSERVED_SERVER_NAME
 AIOBSEOF
 
 Log "\__Installing ai-obs helm chart (Observed cluster named $AI_CLUSTER_NAME).."

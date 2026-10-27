@@ -64,8 +64,8 @@ function gensuseobservabilityvalues
     --set sizing.profile="trial" 
 
   # Add values for ingress
-  Log "\___Creating extra helm values for ingress and opentelemetry.."
-  cat << EOF >./local/suse-observability-values/templates/ingress_values.yaml
+  Log "\___Creating extra helm values for ingress (nginx).."
+  cat << EOF >./local/suse-observability-values/templates/ingress_values_nginx.yaml
 ---
 # SUSE Observability ingress helm chart values
 ingress:
@@ -83,8 +83,9 @@ ingress:
         - $OBS_HOSTNAME
 EOF
 
-    # Add values for opentelemetry
-    cat << OTEOF >./local/suse-observability-values/templates/otel_values.yaml
+  # Add values for opentelemetry
+  Log "\___Creating extra helm values for opentelemetry.."
+  cat << OTEOF >./local/suse-observability-values/templates/otel_values.yaml
 opentelemetry:
   enabled: true
 
@@ -174,11 +175,13 @@ function installsuseobservability
   helm --kubeconfig=./local/admin.conf upgrade \
     --install obs suse-observability/suse-observability \
     --namespace suse-observability --create-namespace \
+    --version="${OBS_VERSION}" \
     --values ./local/suse-observability-values/templates/baseConfig_values.yaml \
     --values ./local/suse-observability-values/templates/sizing_values.yaml \
-    --values ./local/suse-observability-values/templates/ingress_values.yaml \
-    --values ./local/suse-observability-values/templates/otel_values.yaml \
-    --values ./local/suse-observability-values/templates/authentication.yaml
+    --values ./local/suse-observability-values/templates/ingress_values_nginx.yaml \
+    --values ./local/suse-observability-values/templates/otel_values.yaml 
+
+#    --values ./local/suse-observability-values/templates/authentication.yaml
 }
 
 # -------------------------------------------------------------------------------------
