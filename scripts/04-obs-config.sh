@@ -201,7 +201,7 @@ global:
 serverUrl: $SUSE_OBSERVABILITY_API_URL
 apiKey: $SUSE_OBSERVABILITY_API_KEY
 apiToken: $SUSE_OBSERVABILITY_API_CLI_TOKEN
-tokenType: service
+tokenType: api
 kubernetesClusters: 
   - $OBSERVED_SERVER_NAME
 AIOBSEOF
